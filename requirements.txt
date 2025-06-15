@@ -10,4 +10,4 @@ pyttsx3
 pyaudio
 gunicorn
 python-dotenv
-pip install pyaudio 
+
