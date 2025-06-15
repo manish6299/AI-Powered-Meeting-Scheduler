@@ -3,4 +3,4 @@ services:
     name: meeting-scheduler
     runtime: python
     buildCommand: ./build.sh
-    startCommand: gunicorn app:app
+    startCommand: gunicorn app:app  # change if needed
