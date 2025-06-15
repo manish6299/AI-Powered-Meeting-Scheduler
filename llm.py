@@ -1,34 +1,42 @@
-import openai
 import os
 import re
 import json
-import os
-import openai
-
-import os
+import requests
 from dotenv import load_dotenv
 
 # Load .env file
 load_dotenv()
-import openai
 
-api_key = os.getenv("OPENAI_API_KEY")
+# Get Google API key
+api_key = os.getenv("GOOGLE_API_KEY")
 if not api_key:
-    raise ValueError("OPENAI_API_KEY environment variable is not set")
+    raise ValueError("GOOGLE_API_KEY environment variable is not set")
 
-client = openai.OpenAI(api_key=api_key)
-
+# Gemini API endpoint
+GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"
 
 def chat_with_llm(prompt):
-    response = client.chat.completions.create(
-        model="gpt-4o",
-        messages=[
-            {"role": "system", "content": "You are a helpful scheduler assistant. Only respond with JSON."},
-            {"role": "user", "content": prompt}
+    payload = {
+        "contents": [
+            {
+                "parts": [
+                    {"text": f"You are a helpful scheduler assistant. Only respond with JSON.\n{prompt}"}
+                ]
+            }
         ]
-    )
-    content = response.choices[0].message.content
-    return content
+    }
+
+    response = requests.post(GEMINI_URL, json=payload)
+    if response.status_code != 200:
+        raise RuntimeError(f"Gemini API error: {response.status_code} {response.text}")
+
+    data = response.json()
+    # Extract the generated text
+    try:
+        content = data["candidates"][0]["content"]["parts"][0]["text"]
+        return content
+    except (KeyError, IndexError):
+        return None
 
 def extract_json_from_llm_response(llm_response):
     """
@@ -42,3 +50,12 @@ def extract_json_from_llm_response(llm_response):
         except json.JSONDecodeError:
             return None
     return None
+
+# # Example usage:
+# if __name__ == "__main__":
+#     prompt = "Schedule a meeting with Alice tomorrow at 3 PM."
+#     response_text = chat_with_llm(prompt)
+#     print("Raw LLM response:", response_text)
+
+#     json_data = extract_json_from_llm_response(response_text)
+#     print("Extracted JSON:", json_data)
