@@ -10,4 +10,5 @@ pyttsx3
 gunicorn
 python-dotenv
 Flask
+python-dateutil
 
