@@ -40,7 +40,7 @@ If you don't have a `requirements.txt` file, install the dependencies manually:
 
 ```bash
 pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
-pip install openai
+pip install gemeni
 pip install SpeechRecognition
 pip install pyttsx3
 pip install python-dateutil
@@ -146,7 +146,7 @@ pipwin install pyaudio
 ai-meeting-scheduler/
 ├── app.py              # Main application controller
 ├── google_calendar.py   # Google Calendar API integration
-├── llm.py              # OpenAI API integration
+├── llm.py              # google API integration
 ├── voice.py            # Voice input/output handling
 ├── credentials.json    # Google API credentials (you create this)
 ├── token.json   
