@@ -9,4 +9,5 @@ SpeechRecognition
 pyttsx3
 gunicorn
 python-dotenv
+Flask
 
